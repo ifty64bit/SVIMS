@@ -50,7 +50,7 @@
             <div class="row mb-5 justify-content-between">
                 <div class="col col-lg-5 col-xl-4">
                     <label for="formFile" class="form-label">Photo</label>
-                    <input class="form-control" type="file" id="formFile">
+                    <input class="form-control" type="file" id="formFile" name="photo">
                 </div>
                 <div class="col col-lg-5 col-xl-4">
                     <label for="blood_group" class="form-label">Blood Group</label>

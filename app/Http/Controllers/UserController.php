@@ -2,8 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ConfirmationMail;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
@@ -35,7 +40,32 @@ class UserController extends Controller
             'address' => ['required', 'string'],
             'photo' => ['required', 'image', 'mimes:jpeg,png,jpg', 'max:2048']
         ]);
-        
-        dd($validated);
+
+        $p_name = Str::uuid()->toString().".".$req->file('photo')->extension();
+        $req->file('photo')->move(public_path('uploads/profile_photo'),$p_name);
+
+        $token = hash('sha256', time());
+
+        $validated += ['role' => 'user', 'photo'=> $p_name, 'remember_token' => $token];
+
+        User::create($validated);
+        Mail::to($validated['email'])->send(new ConfirmationMail(
+            ['name'=>$validated['first_name'], 'link'=>'http://localhost/verify/'.$token.'/'.$validated['email']]
+        ));
+
+        #return to dashboard
+    }
+
+    public function verify($token,$email){
+        $user = User::where('remember_token', $token)->where('email',$email)->first();
+        if(!$user){
+            redirect('/login');
+        }
+        else{
+            $user->email_verified_at = Carbon::now();
+            $user->remember_token = "";
+            $user->save();
+            echo "Signup verified succesfully";
+        }
     }
 }
