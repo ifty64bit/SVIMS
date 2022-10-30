@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('photo')->unique();#
             $table->string('phone')->unique();#
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');#
+            $table->string('password')->nullable();#
             $table->string('blood_group');#
             $table->integer('nid');#
             $table->string('dob');#

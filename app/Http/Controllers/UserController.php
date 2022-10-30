@@ -7,6 +7,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 
@@ -32,8 +33,8 @@ class UserController extends Controller
         $validated = $req->validate([
             'first_name' => ['required', 'string', 'min:3'],
             'last_name' => ['required', 'string', 'min:3'],
-            'phone' => ['required', 'numeric', 'min:10'],
-            'email' => ['required', 'email'],
+            'phone' => ['required', 'numeric', 'min:10','unique:users'],
+            'email' => ['required', 'email','unique:users'],
             'blood_group' => ['required'],
             'nid' => ['required', 'numeric'],
             'dob' => ['required', 'string'],
@@ -46,26 +47,55 @@ class UserController extends Controller
 
         $token = hash('sha256', time());
 
-        $validated += ['role' => 'user', 'photo'=> $p_name, 'remember_token' => $token];
+        $validated += ['role' => 'user', 'remember_token' => $token];
+        $validated['photo'] = $p_name;
 
-        User::create($validated);
+        $user = new User();
+        $user->first_name = $validated['first_name'];
+        $user->last_name = $validated['last_name'];
+        $user->phone = $validated['phone'];
+        $user->email = $validated['email'];
+        $user->blood_group = $validated['blood_group'];
+        $user->nid = $validated['nid'];
+        $user->dob = $validated['dob'];
+        $user->address = $validated['address'];
+        $user->photo = $p_name;
+        $user->remember_token = $token;
+        $user->role='user';
+        $user->save();
         Mail::to($validated['email'])->send(new ConfirmationMail(
             ['name'=>$validated['first_name'], 'link'=>'http://localhost/verify/'.$token.'/'.$validated['email']]
         ));
 
-        #return to dashboard
+        return redirect()->route('dashboard')->with(['success'=>"Success, User ".$validated['first_name']." Added"]);
     }
 
     public function verify($token,$email){
         $user = User::where('remember_token', $token)->where('email',$email)->first();
         if(!$user){
-            redirect('/login');
+            return redirect('/');
+        }
+        return view('user.setPassword');
+    }
+
+    public function setPassword(Request $req){
+        $req->validate([
+            'old_password' => $req->has('old_password') ? 'required' : 'nullable',
+            'password' => 'required|min:6',
+            'password_again' => 'same:password'
+        ]);
+
+        $user = User::where('remember_token', $req->token)->where('email',$req->email)->first();
+
+        if($req->has('old_password')){
+            #password reset logic
         }
         else{
+            $user->password = Hash::make($req->password);
             $user->email_verified_at = Carbon::now();
             $user->remember_token = "";
             $user->save();
-            echo "Signup verified succesfully";
+            return redirect()->route('login');
         }
     }
 }

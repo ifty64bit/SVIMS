@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\UserController;
 use App\Mail\ConfirmationMail;
@@ -18,6 +19,8 @@ Route::controller(UserController::class)->group(function(){
 
     Route::post('/login', 'login');
 
+    Route::get('/logout', 'logout')->name('logout');
+
 
     Route::get('/registration', function(){
         return view('user.registration');
@@ -26,6 +29,7 @@ Route::controller(UserController::class)->group(function(){
     Route::post('/registration', 'registration')->middleware('access:admin');
 
     Route::get('/verify/{token}/{email}', 'verify');
+    Route::post('/verify/{token}/{email}', 'setPassword');
 
     
 });
@@ -35,6 +39,13 @@ Route::controller(OwnerController::class)->group(function(){
     Route::get('/portal', function(){
         return view('index');
     })->name('portal')->middleware('access:user');
+});
+
+#Admin Controller
+Route::controller(AdminController::class)->group(function(){
+    Route::get('/dashboard', function(){
+        return view('admin.dashboard');
+    })->name('dashboard');
 });
 
 #Utility
