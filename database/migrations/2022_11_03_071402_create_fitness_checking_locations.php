@@ -13,13 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('transactions', function (Blueprint $table) {
+        Schema::create('fitness_checking_locations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('amount');
-            $table->string('method');
-            $table->string('date');
-            $table->string('ref')->unique();
-            $table->string('status');
+            $table->string('name');
+            $table->string('location');
+            $table->string('latitude');
+            $table->string('longitude');
             $table->timestamps();
         });
     }
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transactions');
+        Schema::dropIfExists('fitness_checking_locations');
     }
 };

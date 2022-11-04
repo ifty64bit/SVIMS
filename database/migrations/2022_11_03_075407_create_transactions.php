@@ -13,14 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('fitness_checking_applications', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('applicant_id');
+            $table->unsignedBigInteger('amount');
+            $table->string('method')->nullable();
             $table->string('status');
-            $table->string('payment_status');
-            $table->string('ref')->unique();
+            $table->string('ref');
             $table->timestamps();
-            $table->foreign('applicant_id')->references('id')->on('users');
         });
     }
 
@@ -31,6 +30,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('fitness_checking_applications');
+        Schema::dropIfExists('transactions');
     }
 };

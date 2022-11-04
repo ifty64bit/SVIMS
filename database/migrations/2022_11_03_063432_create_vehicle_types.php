@@ -13,14 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('licence_renew_applications', function (Blueprint $table) {
+        Schema::create('vehicle_types', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('applicant_id');
-            $table->string('status');
-            $table->string('payment_status');
-            $table->string('ref')->unique();
+            $table->string('type');
             $table->timestamps();
-            $table->foreign('applicant_id')->references('id')->on('users');
         });
     }
 
@@ -31,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('licence_renew_applications');
+        Schema::dropIfExists('vehicle_types');
     }
 };

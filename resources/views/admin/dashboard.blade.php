@@ -9,8 +9,8 @@
         </x-card>
 
         <x-card>
-            <x-slot:url>/dashboard</x-slot>
-            <x-slot:title>View All</x-slot>
+            <x-slot:url>/owners</x-slot>
+            <x-slot:title>Owners List</x-slot>
             <x-slot:desc>View All Vehicle Owners</x-slot>
         </x-card>
     </div>

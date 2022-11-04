@@ -3,6 +3,7 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Symfony\Component\Uid\Ulid;
 
 return new class extends Migration
 {
@@ -23,7 +24,7 @@ return new class extends Migration
             $table->string('submission_date');
             $table->string('approval_date');
             $table->string('payment_status');
-            $table->string('ref')->unique();
+            $table->string('ref')->default('OTA-'.new Ulid());
             $table->timestamps();
             $table->foreign('from')->references('id')->on('users');
             $table->foreign('to')->references('id')->on('users');

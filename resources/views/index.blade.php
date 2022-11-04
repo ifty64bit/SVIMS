@@ -1,10 +1,10 @@
 @extends('layouts.main')
-@section('title', 'SVIMS')
+@section('title', 'Portal')
 @section('body')
-    <div class="d-flex flex-column align-items-center justify-content-center" style="width: 100%; height: 70vh">
-        <div class="">
-            <p>Welcome to</p>
-            <h2>Smart Vehicle Information Managment System</h2>
-        </div>
+<div class="mt-5 d-flex flex-column justify-content-center align-items-center" style="height: 70vh">
+    <div>
+        <h3>Welcome</h3>
+        <h2>Smart Vehicle Information Managment System</h2>
     </div>
+</div>
 @endsection

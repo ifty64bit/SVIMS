@@ -64,7 +64,7 @@ class UserController extends Controller
         $user->role='user';
         $user->save();
         Mail::to($validated['email'])->send(new ConfirmationMail(
-            ['name'=>$validated['first_name'], 'link'=>'http://localhost/verify/'.$token.'/'.$validated['email']]
+            ['name'=>$validated['first_name'], 'link'=>'http://127.0.0.1:8000/verify/'.$token.'/'.$validated['email']]
         ));
 
         return redirect()->route('dashboard')->with(['success'=>"Success, User ".$validated['first_name']." Added"]);

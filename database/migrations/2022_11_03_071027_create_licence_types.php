@@ -13,13 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('driver_licenses', function (Blueprint $table) {
+        Schema::create('licence_types', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->enum('type', ['Learner', 'Professional', 'Non-Professional', 'Public Service', 'Instructor']);
-            $table->string('date_of_issue');
+            $table->string('type');
             $table->timestamps();
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -30,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('driver_licenses');
+        Schema::dropIfExists('licence_types');
     }
 };

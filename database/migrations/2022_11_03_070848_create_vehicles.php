@@ -18,13 +18,14 @@ return new class extends Migration
             $table->unsignedBigInteger('owner_id');
             $table->string('brand');
             $table->string('model');
-            $table->string('type');
+            $table->unsignedBigInteger('type');
             $table->string('color');
             $table->string('transmission');
             $table->integer('doors');
             $table->string('fuel_type');
             $table->timestamps();
             $table->foreign('owner_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('type')->references('id')->on('vehicle_types')->onDelete('cascade');
         });
     }
 
