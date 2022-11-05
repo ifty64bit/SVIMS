@@ -21,7 +21,7 @@ class Access
             return redirect()->route('login');
         }
 
-        if(Auth::user()->role == $role){
+        if(Auth::user()->role == $role || $role == "both"){
             return $next($request);
         }
         else{

@@ -29,7 +29,7 @@ Route::controller(UserController::class)->group(function(){
     Route::post('/verify/{token}/{email}', 'setPassword');
     Route::get('/profile/{id}', function($id){
         return view('user.viewUserDetails')->with(['user'=>User::where('id',$id)->first()]);
-    });
+    })->middleware('access:both');
     
 });
 
@@ -49,6 +49,10 @@ Route::controller(AdminController::class)->group(function(){
     })->name('dashboard')->middleware('access:admin');
 
     Route::get('/owners', 'viewAllOwners')->name('viewAllOwners')->middleware('access:admin');
+    Route::get('/profile/{id}/edit', function($id){
+        return view('admin.userProfileEdit')->with(['user'=>User::where('id',$id)->first()]);
+    })->name('edit')->middleware('access:admin');
+    Route::post('/profile/{id}/edit', 'userProfileEdit')->middleware('access:admin');
 });
 
 #Utility
