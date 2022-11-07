@@ -23,14 +23,14 @@ Route::controller(UserController::class)->group(function(){
     Route::get('/logout', 'logout')->name('logout');
     Route::get('/registration', function(){
         return view('admin.registration');
-    })->name('registration')->middleware('access:admin');
-    Route::post('/registration', 'registration')->middleware('access:admin');
+    })->name('registration');//->middleware('access:admin');
+    Route::post('/registration', 'registration');//->middleware('access:admin');
     Route::get('/verify/{token}/{email}', 'verify');
     Route::post('/verify/{token}/{email}', 'setPassword');
     Route::get('/profile/{id}', function($id){
         return view('user.viewUserDetails')->with(['user'=>User::where('id',$id)->first()]);
     })->middleware('access:both');
-    
+
 });
 
 #Owner Controller
@@ -39,7 +39,7 @@ Route::controller(OwnerController::class)->group(function(){
         return view('index');
     })->name('portal')->middleware('access:user');
 
-    
+
 });
 
 #Admin Controller
@@ -53,6 +53,10 @@ Route::controller(AdminController::class)->group(function(){
         return view('admin.userProfileEdit')->with(['user'=>User::where('id',$id)->first()]);
     })->name('edit')->middleware('access:admin');
     Route::post('/profile/{id}/edit', 'userProfileEdit')->middleware('access:admin');
+    Route::get('/vehicle','vehicleIndex')->name('Vehicle')->middleware('access:admin');
+    Route::post('/vehicle','vehiclePost')->name('Vehicle.post')->middleware('access:admin');
+    Route::get('/vehicles', 'viewAllVehicles')->name('viewAllVehicles')->middleware('access:admin');
+    Route::get('/vehicles/delete/{id}', 'deleteVehicles')->name('deleteVehicles')->middleware('access:admin');
 });
 
 #Utility
@@ -61,6 +65,6 @@ Route::get('testMail', function(){
         'name' => 'Ifty',
         'link' => 'Test_Test'
     ];
-     
+
     Mail::to('efte404@gmail.com')->send(new ConfirmationMail($data));
 });

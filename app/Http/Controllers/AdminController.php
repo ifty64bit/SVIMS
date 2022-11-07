@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Vehicle;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -22,7 +23,7 @@ class AdminController extends Controller
             'dob' => ['required', 'string'],
             'address' => ['required', 'string'],
         ]);
-        
+
         $user = User::find($req->id);
         $user->first_name = $req->first_name;
         $user->last_name = $req->last_name;
@@ -35,4 +36,42 @@ class AdminController extends Controller
         $user->save();
         return redirect("/profile/".$req->id);
     }
+    public function vehicleIndex(){
+        return view("admin.vehicle");
+     }
+     public function vehiclePost(Request $req)
+     {
+        $validated = $req->validate([
+            'owner_id'=>['required','numeric','min:1'],
+            'brand' => ['required', 'string', 'min:3'],
+            'model' => ['required', 'string', 'min:3'],
+            'color' => ['required', 'string', 'min:3'],
+            'type' => ['required'],
+            'fuel_type' => ['required'],
+            'doors' => ['required', 'numeric'],
+            'transmission' => ['required', 'numeric'],
+
+        ]);
+        $vehicle = new Vehicle();
+        $vehicle->owner_id = (int)$req->owner_id;
+        $vehicle->brand =$req->brand;
+        $vehicle->model =$req->model;
+        $vehicle->type =(int)$req->type;
+        $vehicle->color =$req->color;
+        $vehicle->transmission =$req->transmission;
+        $vehicle->doors =(int)$req->doors;
+        $vehicle->fuel_type =$req->fuel_type;
+        $vehicle->save();
+       return redirect()->route ("viewAllVehicles");
+     }
+     public function viewAllVehicles(){
+     return view("admin.viewAllVehicle",['vehicles'=>Vehicle::all()]);
+     }
+     public function deleteVehicles($id){
+        $vehicle = Vehicle :: find($id);
+        $vehicle ->delete();
+        return redirect()->route ("viewAllVehicles");
+
+
+     }
 }
