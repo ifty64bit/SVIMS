@@ -12,7 +12,7 @@ class AdminController extends Controller
     }
 
     public function userProfileEdit(Request $req){
-        $validated = $req->validate([
+        $req->validate([
             'first_name' => ['required', 'string', 'min:3'],
             'last_name' => ['required', 'string', 'min:3'],
             'phone' => ['required', 'numeric', 'min:10'],
