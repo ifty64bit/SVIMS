@@ -23,7 +23,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/users', [UserController::class, 'getAll'])->middleware('access:admin');
-Route::get('/users/user/{id}', [UserController::class, 'getById']);
+Route::get('/users/{name}', [UserController::class, 'searchUser'])->middleware('access:admin');
+Route::get('/users/user/{id}', [UserController::class, 'getById'])->middleware('access:both');
+Route::put('/users/user/{id}', [UserController::class, 'updateUser'])->middleware('access:both');
 Route::post('/users/user', [UserController::class, 'register']);
 Route::post('/verify', [UserController::class, 'verify']);
 Route::post('/users/user/{id}/setPassword', [UserController::class, 'setPassword']);

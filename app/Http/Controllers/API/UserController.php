@@ -97,4 +97,41 @@ class UserController extends Controller
             return response("Passwords are Set", 200);
         }
     }
+
+    public function updateUser(Request $req)
+    {
+        $user = User::find($req->id);
+        if ($req->has('first_name')) {
+            $user->first_name = $req->first_name;
+        }
+        if ($req->has('last_name')) {
+            $user->last_name = $req->last_name;
+        }
+        if ($req->has('phone')) {
+            $user->phone = $req->phone;
+        }
+        if ($req->has('email')) {
+            $user->email = $req->email;
+        }
+        if ($req->has('blood_group')) {
+            $user->blood_group = $req->blood_group;
+        }
+        if ($req->has('nid')) {
+            $user->nid = $req->nid;
+        }
+        if ($req->has('dob')) {
+            $user->dob = $req->dob;
+        }
+        if ($req->has('address')) {
+            $user->address = $req->address;
+        }
+        $user->save();
+        return response($user, 200);
+    }
+
+    public function searchUser(Request $req)
+    {
+        $result = User::whereRaw('concat(first_name," ",last_name) like ?', "%{$req->name}%")->where('role', 'user')->get();
+        return response($result, 200);
+    }
 }
